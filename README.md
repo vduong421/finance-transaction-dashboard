@@ -1,20 +1,13 @@
 # Finance Transaction Dashboard
 
-A small Python analytics app that imports transaction CSV data into SQLite, categorizes spending, and generates an HTML spending report.
+A Python analytics app that imports transaction CSV data into SQLite, categorizes spending, and generates an HTML spending report.
 
-## Why It Matches Fintech / Full-Stack Jobs
+## What It Does
 
-- Affirm-style finance/product data workflow
-- Shows ingestion, database storage, category logic, summaries, and user-facing report output
-- Can be extended into an API or Streamlit dashboard
-
-## Features
-
-- CSV transaction import
-- SQLite persistence
-- Rule-based merchant/category mapping
-- Monthly and category spending summaries
-- HTML report generation
+- Imports CSV transaction data into a local SQLite database.
+- Applies merchant/category rules for spending analysis.
+- Produces monthly and category-level summaries.
+- Generates a browser-readable HTML report for review.
 
 ## Run
 
@@ -24,12 +17,23 @@ python app.py --csv samples/transactions.csv --out report.html
 
 Open `report.html` in your browser.
 
-## Resume Bullets
+## Engineering Value
 
-- Built a Python finance dashboard that imports transaction CSV data into SQLite, categorizes merchants, and generates monthly/category spending summaries.
-- Implemented a lightweight analytics workflow with ingestion, persistence, transformation, and HTML reporting.
-- Designed the project as a fintech/product data demo that can be extended into a full-stack API or dashboard.
+- Models a small finance/product data workflow with ingestion, persistence, transformation, and reporting.
+- Can be extended into a backend API, scheduled reporting job, or internal analytics dashboard.
+- Useful for product analytics, fintech tooling, and lightweight operational reporting.
 
-## GitHub Reminder
+## Project Workbench
 
-Push this project to GitHub before using it as a resume link.
+Launch the production-style desktop workbench with:
+
+```powershell
+launch-workbench.bat
+```
+
+What it adds:
+
+- Local-first AI copilot using `google/gemma-4-e4b` by default
+- Operator-focused workbench for reviewing real project inputs and outputs
+- System design, production-impact, and operational brief generation on demand
+- Grounded responses based on this project's README, sample files, and deterministic outputs

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Finance Transaction Dashboard</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.chart-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 90px;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.chart-label {
+  font-weight: bold;
+}
+
+.chart-track {
+  height: 16px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.chart-bar {
+  height: 100%;
+  background: #2563eb;
+  border-radius: 999px;
+}
+
+.chart-value {
+  text-align: right;
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Finance Transaction Dashboard</h1>
+  <p>Deterministic spend analytics + local AI budget analyst.</p>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Ask Local AI</h2>
+    <div class="chat">
+      <input id="question" placeholder="Ask about spending risks, categories, merchants, or monthly trends...">
+      <button onclick="askAI()">Ask</button>
+    </div>
+    <div class="quick">
+      <button onclick="preset('What are the top spending risks this period?')">Top Risks</button>
+      <button onclick="preset('Which category has the highest spending and why?')">Category Review</button>
+      <button onclick="preset('Which merchants should I review first?')">Merchant Review</button>
+      <button onclick="preset('What budget actions should I take next?')">Recommended Actions</button>
+    </div>
+    <p id="status"></p>
+    <div id="answer" class="grid"></div>
+  </section>
+
+  <section class="kpis">
+    <div class="kpi"><span>Total Spend</span><strong id="totalSpend">$0</strong></div>
+    <div class="kpi"><span>Transactions</span><strong id="txCount">0</strong></div>
+    <div class="kpi"><span>Average Transaction</span><strong id="avgTx">$0</strong></div>
+    <div class="kpi"><span>Highest Category</span><strong id="topCategory">-</strong></div>
+  </section>
+
+  <section class="grid2">
+    <div>
+      <section class="card">
+        <h2>Local AI Analyst</h2>
+        <div id="analyst" class="grid"></div>
+      </section>
+
+      <section class="card">
+        <h2>Category Spending</h2>
+        <div id="categories"></div>
+        <div id="categoryChart"></div>
+      </section>
+
+      <section class="card">
+        <h2>Transaction Records</h2>
+        <table id="transactions"></table>
+      </section>
+    </div>
+
+    <aside>
+      <section class="card">
+        <h2>Top Merchants</h2>
+        <div id="merchants"></div>
+        <div id="merchantChart"></div>
+      </section>
+
+      <section class="card">
+        <h2>Monthly Trend</h2>
+        <div id="months"></div>
+        <div id="monthlyChart"></div>
+      </section>
+
+      <section class="card">
+        <h2>Largest Transactions</h2>
+        <div id="largest"></div>
+      </section>
+    </aside>
+  </section>
+</main>
+
+<script src="app.js"></script>
+
+<script>
+function makeChart(title, rows, labelKey, valueKey, targetId){
+  if(!rows || !rows.length){
+    document.getElementById(targetId).innerHTML = "<p>No data</p>"
+    return
+  }
+
+  const max = Math.max(...rows.map(r => r[valueKey]), 1)
+
+  document.getElementById(targetId).innerHTML =
+    `<h3>${title}</h3>` +
+    rows.map(r => {
+      const width = Math.round((r[valueKey] / max) * 100)
+      return `
+        <div class="chart-row">
+          <div class="chart-label">${r[labelKey]}</div>
+          <div class="chart-track">
+            <div class="chart-bar" style="width:${width}%"></div>
+          </div>
+          <div class="chart-value">$${Number(r[valueKey]).toFixed(2)}</div>
+        </div>
+      `
+    }).join("")
+}
+
+const originalLoad = window.load
+
+window.load = async function(){
+  const res = await fetch('/api/data')
+  const d = await res.json()
+
+  makeChart("Category Spend", d.summary.category_totals, "category", "total", "categoryChart")
+  makeChart("Monthly Spend", d.summary.monthly_totals, "month", "total", "monthlyChart")
+  makeChart("Top Merchants", d.summary.top_merchants, "merchant", "total", "merchantChart")
+
+  if(originalLoad){
+    originalLoad()
+  }
+}
+</script>
+
+</body>
+</html>

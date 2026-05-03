@@ -20,8 +20,10 @@ def test_import_transactions_and_summarize(tmp_path):
     db = sqlite3.connect(":memory:")
 
     import_transactions(db, csv_path)
-    by_category, by_month = summarize(db)
+    summary = summarize(db)
 
-    assert by_category["software"] == 20.50
-    assert by_category["food"] == 12.00
-    assert by_month["2026-01"] == 32.50
+    assert summary["total_transactions"] == 2
+    assert summary["total_spend"] == 32.50
+    assert summary["category_totals"][0]["total"] == 20.50
+    assert summary["monthly_totals"][0]["month"] == "2026-01"
+    assert summary["monthly_totals"][0]["total"] == 32.50
