@@ -2,6 +2,10 @@
 
 Finance Transaction Dashboard is a local finance-operations tool that categorizes transactions, summarizes spending patterns, flags budget risk, and uses a local AI analyst to explain financial trends.
 
+## Product Screenshot
+
+![Product screenshot](assets/product-screenshot.png)
+
 The deterministic dashboard provides the numbers; the AI analyst converts those numbers into business-readable insight and recommended follow-up.
 
 ## What It Does
